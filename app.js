@@ -1,5 +1,8 @@
 let boxes = document.querySelectorAll(".box");
-let resetBtn = document.querySelectorAll("#reset-btn");
+let resetBtn = document.querySelector("#reset-btn");
+let newGameBtn = document.querySelector("#new-btn");
+let msgContainer = document.querySelector(".msg-container");
+let msg = document.querySelector("#msg");
 
 let turnO = true; // playerX, playerY
 
@@ -15,6 +18,12 @@ const winPattern = [
   [2, 4, 6]
 
 ];
+
+const resetGame = () => {
+   turnO = true;
+   enableBoxes();
+   msgContainer.classList.add("hide");
+};
 
 boxes.forEach ((box) => {
 
@@ -37,8 +46,46 @@ boxes.forEach ((box) => {
     });
 });
 
-const checkWinner = () => {
-    for(pattern of winPattern) {
-    console.log(pattern);
+const disableBoxes = () => {
+    for(let box of boxes) {
+        box.disabled = true;
     }
 }
+
+const enableBoxes = () => {
+    for(let box of boxes) {
+        box.disabled = false;
+        box.innerText = "";
+    }
+}
+
+const showWinner = (winner) => {
+    msg.innerText = `Congratulations, Winner is ${winner}`;
+    msgContainer.classList.remove("hide");
+    disableBoxes();
+  
+};
+
+const checkWinner = () => {
+    for(pattern of winPattern) {
+    let post1Val = boxes[pattern[0]].innerText;
+    let post2Val = boxes[pattern[1]].innerText;
+    let post3Val = boxes[pattern[2]].innerText;
+    
+    if(post1Val != "" && post2Val != "" && post3Val != "") {
+     
+        if (post1Val === post2Val && post2Val === post3Val) {
+        console.log("Winner", post1Val);
+        msg.innerText = "Winner: " + post1Val;
+        showWinner(post1Val);
+       
+        }
+       }
+    }
+};
+
+
+newGameBtn.addEventListener("click", resetGame);
+resetBtn.addEventListener("click", resetGame);
+
+
